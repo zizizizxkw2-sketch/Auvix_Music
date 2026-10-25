@@ -35,11 +35,13 @@ jobs:
         run: |
           mkdir project
           unzip -q AuvixMusicAndroid_Project.zip -d project
+          find project -name settings.gradle.kts -o -name settings.gradle
 
       - name: Build debug APK
         run: |
-          gradle -p project assembleDebug
-
+          PROJECT_DIR="$(dirname "$(find project -name settings.gradle.kts -o -name settings.gradle | head -n 1)")"
+          gradle -p "$PROJECT_DIR" assembleDebug
+          
       - name: Save APK
         uses: actions/upload-artifact@v4
         with:
